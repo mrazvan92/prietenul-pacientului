@@ -1,6 +1,6 @@
 <?php
 /**
-  * Index controller
+  * Feedback controller
   *
   * PHP version 5
   *
@@ -16,7 +16,7 @@
  */
 
 /**
-  * Controller class
+  * Feedback class
   *
   * @category   PrietenulPacientului
   * @package    Default
@@ -28,18 +28,11 @@
   * @link       http://www.GovITHub.ro/prietenulpacientului
   * @since      File available since Release 1.0.1
  */
-class IndexController extends Zend_Controller_Action
+class FeedbackController extends Zend_Controller_Action
 {
-    private $_currentUser = null;
-
 	public function preDispatch()
     {
-    	$auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity()) {
-            $userSession = new Zend_Session_Namespace('login_user');
-        } else {
-            return $this->_helper->redirector('logout', 'login');
-        }
+
     }
 
 	/**
@@ -49,7 +42,13 @@ class IndexController extends Zend_Controller_Action
 	 */
     public function indexAction()
     {
+        $auth = $this->_request->getParam('auth_code');
 
+        if ($auth !== null) {
+            $this->_helper->feedback->startQuestionnaire($authCode);
+        } else {
+            $this->view->noAuthCode = true;
+        }
     }
 
 }

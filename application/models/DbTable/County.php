@@ -1,6 +1,6 @@
 <?php
 /**
-  * Index controller
+  * Table model
   *
   * PHP version 5
   *
@@ -16,7 +16,7 @@
  */
 
 /**
-  * Controller class
+  * Table model class
   *
   * @category   PrietenulPacientului
   * @package    Default
@@ -28,28 +28,12 @@
   * @link       http://www.GovITHub.ro/prietenulpacientului
   * @since      File available since Release 1.0.1
  */
-class IndexController extends Zend_Controller_Action
+class Application_Model_DbTable_County extends Zend_Db_Table_Abstract
 {
-    private $_currentUser = null;
-
-	public function preDispatch()
-    {
-    	$auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity()) {
-            $userSession = new Zend_Session_Namespace('login_user');
-        } else {
-            return $this->_helper->redirector('logout', 'login');
-        }
-    }
 
 	/**
-	 * Initialize lang translation
-	 *
-	 * @return null
+	 * Table name(actual table name)
+	 * @var string
 	 */
-    public function indexAction()
-    {
-
-    }
-
+    protected $_name    = 'county';
 }

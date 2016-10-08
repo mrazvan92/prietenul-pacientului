@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 08 Oct 2016 la 13:47
+-- Generation Time: 08 Oct 2016 la 17:25
 -- Versiune server: 10.1.16-MariaDB
 -- PHP Version: 5.5.38
 
@@ -23,32 +23,93 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structura de tabel pentru tabelul `admin`
+-- Structura de tabel pentru tabelul `answers`
 --
 
-CREATE TABLE `admin` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `active` set('Y','N') NOT NULL DEFAULT 'Y'
+CREATE TABLE `answers` (
+  `answer_id` int(10) UNSIGNED NOT NULL,
+  `question_id` int(11) DEFAULT NULL,
+  `answer` text NOT NULL,
+  `value` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structura de tabel pentru tabelul `answers`
+-- Structura de tabel pentru tabelul `county`
 --
 
-CREATE TABLE `answers` (
-  `answer_id` bigint(20) UNSIGNED NOT NULL,
-  `answer_question_id` bigint(20) UNSIGNED NOT NULL,
-  `answer_description` text COLLATE utf8_unicode_ci NOT NULL,
-  `answer_explanation` text COLLATE utf8_unicode_ci,
-  `answer_isright` tinyint(1) NOT NULL DEFAULT '0',
-  `answer_enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `answer_position` bigint(20) UNSIGNED DEFAULT NULL,
-  `answer_keyboard_key` smallint(10) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `county` (
+  `county_id` int(20) UNSIGNED NOT NULL,
+  `county` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structura de tabel pentru tabelul `doctors`
+--
+
+CREATE TABLE `doctors` (
+  `doctor_id` int(20) UNSIGNED NOT NULL,
+  `station_id` int(20) NOT NULL,
+  `doctor_name` varchar(255) NOT NULL,
+  `doctor_surname` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structura de tabel pentru tabelul `hospital`
+--
+
+CREATE TABLE `hospital` (
+  `hospital_id` int(20) UNSIGNED NOT NULL,
+  `county_id` int(20) DEFAULT NULL,
+  `hospital` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structura de tabel pentru tabelul `questionnaire`
+--
+
+CREATE TABLE `questionnaire` (
+  `questionnaire_id` int(20) UNSIGNED NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structura de tabel pentru tabelul `questionnaire_feedback`
+--
+
+CREATE TABLE `questionnaire_feedback` (
+  `questionnaire_feedback_id` int(20) UNSIGNED NOT NULL,
+  `questionnaire_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `station_id` int(20) NOT NULL,
+  `section_id` int(20) NOT NULL,
+  `starttime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structura de tabel pentru tabelul `questionnaire_feedback_details`
+--
+
+CREATE TABLE `questionnaire_feedback_details` (
+  `questionnaire_feedback_details_id` int(20) UNSIGNED NOT NULL,
+  `questionnaire_feedback_id` int(20) NOT NULL,
+  `question_id` int(20) NOT NULL,
+  `answer_id` int(20) NOT NULL,
+  `answer` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -57,13 +118,24 @@ CREATE TABLE `answers` (
 --
 
 CREATE TABLE `questions` (
-  `question_id` bigint(20) UNSIGNED NOT NULL,
-  `question_subject_id` bigint(20) UNSIGNED NOT NULL,
-  `question_description` text COLLATE utf8_unicode_ci NOT NULL,
-  `question_explanation` text COLLATE utf8_unicode_ci,
-  `question_type` smallint(3) UNSIGNED NOT NULL DEFAULT '1',
-  `question_enabled` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `question_id` int(20) UNSIGNED NOT NULL,
+  `section_id` int(20) DEFAULT NULL,
+  `question` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `question_type` enum('radio','text') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structura de tabel pentru tabelul `sections`
+--
+
+CREATE TABLE `sections` (
+  `section_id` int(20) NOT NULL,
+  `questionnaire_id` int(20) DEFAULT NULL,
+  `section` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -83,99 +155,20 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`sessionId`, `modified`, `lifetime`, `data`) VALUES
-('7ihtnu0unmr1js7kjnunf18oj1', 1475927223, 43200, '');
+('7ihtnu0unmr1js7kjnunf18oj1', 1475928644, 43200, ''),
+('io5bphh3herr1bokvunce03924', 1475940277, 43200, '');
 
 -- --------------------------------------------------------
 
 --
--- Structura de tabel pentru tabelul `tests`
+-- Structura de tabel pentru tabelul `stations`
 --
 
-CREATE TABLE `tests` (
-  `test_id` bigint(20) UNSIGNED NOT NULL,
-  `test_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `test_description` text COLLATE utf8_unicode_ci NOT NULL,
-  `test_begin_time` datetime DEFAULT NULL,
-  `test_end_time` datetime DEFAULT NULL,
-  `test_duration_time` smallint(10) UNSIGNED NOT NULL DEFAULT '0',
-  `test_results_to_users` tinyint(1) NOT NULL DEFAULT '0',
-  `test_report_to_users` tinyint(1) NOT NULL DEFAULT '0',
-  `test_random_questions_select` tinyint(1) NOT NULL DEFAULT '1',
-  `test_random_questions_order` tinyint(1) NOT NULL DEFAULT '1',
-  `test_questions_order_mode` smallint(3) UNSIGNED NOT NULL DEFAULT '0',
-  `test_random_answers_select` tinyint(1) NOT NULL DEFAULT '1',
-  `test_random_answers_order` tinyint(1) NOT NULL DEFAULT '1',
-  `test_noanswer_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `test_repeatable` tinyint(1) NOT NULL DEFAULT '0',
-  `test_logout_on_timeout` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Structura de tabel pentru tabelul `tests_feedback`
---
-
-CREATE TABLE `tests_feedback` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `test_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `current_page` int(11) NOT NULL DEFAULT '0',
-  `completed` tinyint(1) NOT NULL DEFAULT '0',
-  `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Structura de tabel pentru tabelul `tests_feedback_detail`
---
-
-CREATE TABLE `tests_feedback_detail` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `tests_feedback_id` bigint(20) UNSIGNED NOT NULL,
-  `question_id` bigint(20) UNSIGNED NOT NULL,
-  `question` text,
-  `value` bigint(20) UNSIGNED NOT NULL,
-  `feedback_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `obsolete` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Structura de tabel pentru tabelul `tests_logs`
---
-
-CREATE TABLE `tests_logs` (
-  `testlog_id` bigint(20) UNSIGNED NOT NULL,
-  `testlog_testuser_id` bigint(20) UNSIGNED NOT NULL,
-  `testlog_user_ip` varchar(39) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `testlog_question_id` bigint(20) UNSIGNED NOT NULL,
-  `testlog_answer_text` text COLLATE utf8_unicode_ci,
-  `testlog_score` decimal(10,3) DEFAULT NULL,
-  `testlog_creation_time` datetime DEFAULT NULL,
-  `testlog_display_time` datetime DEFAULT NULL,
-  `testlog_change_time` datetime DEFAULT NULL,
-  `testlog_reaction_time` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
-  `testlog_order` smallint(6) NOT NULL DEFAULT '1',
-  `testlog_num_answers` smallint(5) UNSIGNED NOT NULL DEFAULT '0',
-  `testlog_comment` text COLLATE utf8_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Structura de tabel pentru tabelul `tests_logs_answers`
---
-
-CREATE TABLE `tests_logs_answers` (
-  `logansw_testlog_id` bigint(20) UNSIGNED NOT NULL,
-  `logansw_answer_id` bigint(20) UNSIGNED NOT NULL,
-  `logansw_selected` smallint(6) NOT NULL DEFAULT '-1',
-  `logansw_order` smallint(6) NOT NULL DEFAULT '1',
-  `logansw_position` bigint(20) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `stations` (
+  `station_id` int(20) UNSIGNED NOT NULL,
+  `hospital_id` int(20) NOT NULL,
+  `station` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -184,37 +177,81 @@ CREATE TABLE `tests_logs_answers` (
 --
 
 CREATE TABLE `users` (
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `user_surename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `user_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_regdate` datetime NOT NULL,
-  `user_ip` varchar(39) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `user_id` int(20) UNSIGNED NOT NULL,
+  `auth_code` varchar(255) NOT NULL,
+  `ip` varchar(15) NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `answers`
 --
 ALTER TABLE `answers`
   ADD PRIMARY KEY (`answer_id`),
-  ADD KEY `p_answer_question_id` (`answer_question_id`);
+  ADD KEY `question_id` (`question_id`);
+
+--
+-- Indexes for table `county`
+--
+ALTER TABLE `county`
+  ADD PRIMARY KEY (`county_id`);
+
+--
+-- Indexes for table `doctors`
+--
+ALTER TABLE `doctors`
+  ADD PRIMARY KEY (`doctor_id`),
+  ADD KEY `hospital_id` (`station_id`);
+
+--
+-- Indexes for table `hospital`
+--
+ALTER TABLE `hospital`
+  ADD PRIMARY KEY (`hospital_id`),
+  ADD KEY `county_id` (`county_id`);
+
+--
+-- Indexes for table `questionnaire`
+--
+ALTER TABLE `questionnaire`
+  ADD PRIMARY KEY (`questionnaire_id`);
+
+--
+-- Indexes for table `questionnaire_feedback`
+--
+ALTER TABLE `questionnaire_feedback`
+  ADD PRIMARY KEY (`questionnaire_feedback_id`),
+  ADD KEY `questionnaire_id` (`questionnaire_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `doctor_id` (`station_id`),
+  ADD KEY `section_id` (`section_id`);
+
+--
+-- Indexes for table `questionnaire_feedback_details`
+--
+ALTER TABLE `questionnaire_feedback_details`
+  ADD PRIMARY KEY (`questionnaire_feedback_details_id`),
+  ADD KEY `questionnaire_feedback_id` (`questionnaire_feedback_id`),
+  ADD KEY `question_id` (`question_id`),
+  ADD KEY `answer_id` (`answer_id`);
 
 --
 -- Indexes for table `questions`
 --
 ALTER TABLE `questions`
   ADD PRIMARY KEY (`question_id`),
-  ADD KEY `p_question_subject_id` (`question_subject_id`);
+  ADD KEY `questionnaire_id` (`section_id`);
+
+--
+-- Indexes for table `sections`
+--
+ALTER TABLE `sections`
+  ADD PRIMARY KEY (`section_id`),
+  ADD KEY `questionnaire_id` (`questionnaire_id`);
 
 --
 -- Indexes for table `sessions`
@@ -223,44 +260,11 @@ ALTER TABLE `sessions`
   ADD PRIMARY KEY (`sessionId`);
 
 --
--- Indexes for table `tests`
+-- Indexes for table `stations`
 --
-ALTER TABLE `tests`
-  ADD PRIMARY KEY (`test_id`);
-
---
--- Indexes for table `tests_feedback`
---
-ALTER TABLE `tests_feedback`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `test_id` (`test_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `tests_feedback_detail`
---
-ALTER TABLE `tests_feedback_detail`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tests_feedback_id` (`tests_feedback_id`),
-  ADD KEY `question_id` (`question_id`),
-  ADD KEY `value` (`value`);
-
---
--- Indexes for table `tests_logs`
---
-ALTER TABLE `tests_logs`
-  ADD PRIMARY KEY (`testlog_id`),
-  ADD UNIQUE KEY `ak_testuser_question` (`testlog_testuser_id`,`testlog_question_id`),
-  ADD KEY `p_testlog_question_id` (`testlog_question_id`),
-  ADD KEY `p_testlog_testuser_id` (`testlog_testuser_id`);
-
---
--- Indexes for table `tests_logs_answers`
---
-ALTER TABLE `tests_logs_answers`
-  ADD PRIMARY KEY (`logansw_testlog_id`,`logansw_answer_id`),
-  ADD KEY `p_logansw_answer_id` (`logansw_answer_id`),
-  ADD KEY `p_logansw_testlog_id` (`logansw_testlog_id`);
+ALTER TABLE `stations`
+  ADD PRIMARY KEY (`station_id`),
+  ADD KEY `hospital_id` (`hospital_id`);
 
 --
 -- Indexes for table `users`
@@ -273,64 +277,55 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `admin`
---
-ALTER TABLE `admin`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `answer_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20238;
+  MODIFY `answer_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `county`
+--
+ALTER TABLE `county`
+  MODIFY `county_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `doctors`
+--
+ALTER TABLE `doctors`
+  MODIFY `doctor_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `hospital`
+--
+ALTER TABLE `hospital`
+  MODIFY `hospital_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `questionnaire`
+--
+ALTER TABLE `questionnaire`
+  MODIFY `questionnaire_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `questionnaire_feedback`
+--
+ALTER TABLE `questionnaire_feedback`
+  MODIFY `questionnaire_feedback_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `question_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4096;
+  MODIFY `question_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `tests`
+-- AUTO_INCREMENT for table `sections`
 --
-ALTER TABLE `tests`
-  MODIFY `test_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+ALTER TABLE `sections`
+  MODIFY `section_id` int(20) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `tests_feedback`
+-- AUTO_INCREMENT for table `stations`
 --
-ALTER TABLE `tests_feedback`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
---
--- AUTO_INCREMENT for table `tests_feedback_detail`
---
-ALTER TABLE `tests_feedback_detail`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64348;
---
--- AUTO_INCREMENT for table `tests_logs`
---
-ALTER TABLE `tests_logs`
-  MODIFY `testlog_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `stations`
+  MODIFY `station_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
---
--- Restrictii pentru tabele sterse
---
-
---
--- Restrictii pentru tabele `tests_feedback`
---
-ALTER TABLE `tests_feedback`
-  ADD CONSTRAINT `tests_feedback_ibfk_1` FOREIGN KEY (`test_id`) REFERENCES `tests` (`test_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tests_feedback_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON UPDATE CASCADE;
-
---
--- Restrictii pentru tabele `tests_feedback_detail`
---
-ALTER TABLE `tests_feedback_detail`
-  ADD CONSTRAINT `tests_feedback_detail_ibfk_1` FOREIGN KEY (`tests_feedback_id`) REFERENCES `tests_feedback` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tests_feedback_detail_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tests_feedback_detail_ibfk_3` FOREIGN KEY (`value`) REFERENCES `answers` (`answer_id`) ON UPDATE CASCADE;
-
+  MODIFY `user_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

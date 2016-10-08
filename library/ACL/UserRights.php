@@ -45,6 +45,7 @@ class ACL_UserRights
 		$aclObj->add(new Zend_Acl_Resource('login'));
 		$aclObj->add(new Zend_Acl_Resource('index'));
 		$aclObj->add(new Zend_Acl_Resource('error'));
+		$aclObj->add(new Zend_Acl_Resource('feedback'));
 
 		/* guest = users not logged on */
 		$aclObj->addRole(new Zend_Acl_Role('guest'));
@@ -56,6 +57,7 @@ class ACL_UserRights
         $aclObj->allow('admin');
         $aclObj->allow('guest', 'adminlogin');
         $aclObj->allow('guest', 'login');
+        $aclObj->allow('guest', 'feedback');
         $aclObj->allow('user', 'login');
         $aclObj->allow('user', 'index');
         $aclObj->allow('user', 'error');
