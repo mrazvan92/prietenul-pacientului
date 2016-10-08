@@ -42,13 +42,64 @@ class FeedbackController extends Zend_Controller_Action
 	 */
     public function indexAction()
     {
-        $auth = $this->_request->getParam('auth_code');
-
-        if ($auth !== null) {
-            $this->_helper->feedback->startQuestionnaire($authCode);
+        $authCode = $this->_request->getParam('authCode');
+        if ($authCode !== null) {
+            $questId = $this->startQuestionnaire($authCode);
         } else {
-            $this->view->noAuthCode = true;
+            $token = $this->_request->getParam('token');
+            $questId = $this->_request->getParam('questId');
+            if($this->testToken($token) !== true) {
+
+            } else {
+
+            }
         }
+    }
+
+    /**
+     * startQuestionnaire
+	 *
+	 * @param string $authCode
+     * @return string
+     */
+	protected function startQuestionnaire($authCode)
+    {
+        $quest = new Application_Model_QuestionnaireMapper();
+        $questMArr = $quest->fetchAll();
+        $questObj = current($questMArr);
+
+        $sectionMap = new Application_Model_SectionsMapper();
+        $sectionstMArr = $sectionMap->fetchAll("questionnaire_id = '".$questObj->getQuestionnaire_id()."'");
+        $sectionObj = current($sectionstMArr);
+        $date = new Zend_Date();
+
+        $userObj = new Application_Model_Users();
+        $userObj->setAuth_code($authCode);
+        $userObj->setTimestamp($date->toString('YYYY-MM-dd HH:mm:ss'));
+        $userObj->setIp('');
+        $userMapper = new Application_Model_UsersMapper();
+        $userId = $userMapper->insert($userObj);
+
+//        $questFeedObj = new Application_Model_QuestionnaireFeedback();
+//        $questFeedObj->setSection_id($sectionObj->getSection_id());
+//        $questFeedObj->setQuestionnaire_id($questObj->getQuestionnaire_id());
+//        $questFeedObj->setUser_id($userId);
+//        $questFeedObj->setStarttime($date->toString('YYYY-MM-dd HH:mm:ss'));
+//        $questFeedMapp = new Application_Model_QuestionnaireFeedbackMapper();
+//        $questFeedId = $questFeedMapp->insert($questFeedObj);
+//
+//        return $questFeedId;
+    }
+
+    /**
+     * startQuestionnaire
+	 *
+	 * @param string $authCode
+     * @return string
+     */
+	protected function testToken($token)
+    {
+        return true;
     }
 
 }

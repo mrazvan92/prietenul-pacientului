@@ -58,9 +58,9 @@ class ACL_UserRights
         $aclObj->allow('guest', 'adminlogin');
         $aclObj->allow('guest', 'login');
         $aclObj->allow('guest', 'feedback');
-        $aclObj->allow('user', 'login');
-        $aclObj->allow('user', 'index');
-        $aclObj->allow('user', 'error');
+        $aclObj->allow('guest', 'login');
+        $aclObj->allow('guest', 'index');
+        $aclObj->allow('guest', 'error');
 
 		return $aclObj;
     }

@@ -28,7 +28,7 @@
   * @link       http://www.GovITHub.ro/prietenulpacientului
   * @since      File available since Release 1.0.1
  */
-class Feedback
+class Zend_Controller_Action_Helper_Feedback extends Zend_Controller_Action_Helper_Abstract
 {
 
     /**
@@ -38,8 +38,11 @@ class Feedback
      * @return string
      */
 	public function startQuestionnaire($authCode)
-    {
-        $questionnaire = new Application_Model_QuestionnaireMapper();
+    {var_dump($authCode);
+        $quest = new Application_Model_QuestionnaireMapper();
+        $questeMArr = $quest->fetchAll(null, 'questionnaire_id ASC', 0, 1);
+
+        var_dump($questeMArr);
     }
 
 }

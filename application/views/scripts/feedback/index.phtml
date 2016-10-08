@@ -6,7 +6,11 @@
   <div id="header">
   </div>
   <div id="content">
+    <form name="feedbackForm" id="feedbackForm" method="post">
 
+        <input value="<?php echo $this->sectionId;?>" name="sectionId" id="sectionId" type="hidden">
+        <input value="<?php echo $this->token;?>" name="token" id="token" type="hidden">
+    </form>
   </div>
 
   <div class="copy">© Copyright 2016 <a href="http://www.GovItHub.ro" target="_blank">GovItHub.ro</a></div>
