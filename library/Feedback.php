@@ -39,7 +39,7 @@ class Feedback
      */
 	public function startQuestionnaire($authCode)
     {
-
+        $questionnaire = new Application_Model_QuestionnaireMapper();
     }
 
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 08 Oct 2016 la 17:25
+-- Generation Time: 08 Oct 2016 la 17:47
 -- Versiune server: 10.1.16-MariaDB
 -- PHP Version: 5.5.38
 
@@ -32,6 +32,37 @@ CREATE TABLE `answers` (
   `answer` text NOT NULL,
   `value` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Salvarea datelor din tabel `answers`
+--
+
+INSERT INTO `answers` (`answer_id`, `question_id`, `answer`, `value`) VALUES
+(3, 1, 'foarte multumit', 100),
+(4, 1, 'multumit', 75),
+(5, 1, 'Nici multumit, Nici nemultumit', 50),
+(6, 1, 'nemultumit', 25),
+(7, 1, 'Foarte nemultumit', 0),
+(9, 2, 'foarte multumit', 100),
+(10, 2, 'multumit', 75),
+(11, 2, 'Nici multumit, Nici nemultumit', 50),
+(12, 2, 'nemultumit', 25),
+(13, 2, 'Foarte nemultumit', 0),
+(14, 3, 'foarte multumit', 100),
+(15, 3, 'multumit', 75),
+(16, 3, 'Nici multumit, Nici nemultumit', 50),
+(17, 3, 'nemultumit', 25),
+(18, 3, 'Foarte nemultumit', 0),
+(19, 4, 'foarte multumit', 100),
+(20, 4, 'multumit', 75),
+(21, 4, 'Nici multumit, Nici nemultumit', 50),
+(22, 4, 'nemultumit', 25),
+(23, 4, 'Foarte nemultumit', 0),
+(24, 5, 'foarte multumit', 100),
+(25, 5, 'multumit', 75),
+(26, 5, 'Nici multumit, Nici nemultumit', 50),
+(27, 5, 'nemultumit', 25),
+(28, 5, 'Foarte nemultumit', 0);
 
 -- --------------------------------------------------------
 
@@ -82,6 +113,13 @@ CREATE TABLE `questionnaire` (
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Salvarea datelor din tabel `questionnaire`
+--
+
+INSERT INTO `questionnaire` (`questionnaire_id`, `name`, `description`) VALUES
+(1, 'Formular feedback pacienti spital', '');
+
 -- --------------------------------------------------------
 
 --
@@ -120,10 +158,21 @@ CREATE TABLE `questionnaire_feedback_details` (
 CREATE TABLE `questions` (
   `question_id` int(20) UNSIGNED NOT NULL,
   `section_id` int(20) DEFAULT NULL,
-  `question` int(11) NOT NULL,
+  `question` text NOT NULL,
   `description` text NOT NULL,
   `question_type` enum('radio','text') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Salvarea datelor din tabel `questions`
+--
+
+INSERT INTO `questions` (`question_id`, `section_id`, `question`, `description`, `question_type`) VALUES
+(1, 1, '… calitatea serviciilor medicale primite in acest spital', '', 'radio'),
+(2, 1, '… modul in care v-au fost respectate drepturile de pacient?', '', 'radio'),
+(3, 2, '… timpul de asteptare pana la prima examinare de catre medic in cadrul sectiei in care ati fost internat?', '', 'radio'),
+(4, 2, '… modul in care ati fost consultat de medicul curant (care v-a ingrijit in sectie)?', '', 'radio'),
+(5, 2, '… tratamentul primit in perioada de spitalizare?', '', 'radio');
 
 -- --------------------------------------------------------
 
@@ -136,6 +185,14 @@ CREATE TABLE `sections` (
   `questionnaire_id` int(20) DEFAULT NULL,
   `section` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Salvarea datelor din tabel `sections`
+--
+
+INSERT INTO `sections` (`section_id`, `questionnaire_id`, `section`) VALUES
+(1, 1, 'Cat de multumit sunteti, in general de …?'),
+(2, NULL, 'Cat de multumit ati fost de …?');
 
 -- --------------------------------------------------------
 
@@ -156,7 +213,7 @@ CREATE TABLE `sessions` (
 
 INSERT INTO `sessions` (`sessionId`, `modified`, `lifetime`, `data`) VALUES
 ('7ihtnu0unmr1js7kjnunf18oj1', 1475928644, 43200, ''),
-('io5bphh3herr1bokvunce03924', 1475940277, 43200, '');
+('io5bphh3herr1bokvunce03924', 1475941587, 43200, '');
 
 -- --------------------------------------------------------
 
@@ -280,7 +337,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `answer_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `answer_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT for table `county`
 --
@@ -300,7 +357,7 @@ ALTER TABLE `hospital`
 -- AUTO_INCREMENT for table `questionnaire`
 --
 ALTER TABLE `questionnaire`
-  MODIFY `questionnaire_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `questionnaire_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `questionnaire_feedback`
 --
@@ -310,12 +367,12 @@ ALTER TABLE `questionnaire_feedback`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `question_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `question_id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `section_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `section_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `stations`
 --
