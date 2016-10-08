@@ -1,0 +1,18 @@
+<?php echo $this->doctype() ?>
+<html>
+<head>
+    <?php
+		echo $this->headTitle('Prietenul Pacientului');
+
+        $this->headScript()->prependFile($this->baseUrl('externals/jquery-validate/jquery.validate.min.js'));
+        $this->headScript()->prependFile($this->baseUrl('externals/jquery/jquery-1.11.1.js'));
+
+		echo $this->headScript();
+		echo $this->headLink();
+	?>
+</head>
+<body>
+    <?php echo $this->layout()->content ?>
+</body>
+</html>
+
