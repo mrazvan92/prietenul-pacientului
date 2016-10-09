@@ -203,8 +203,22 @@ class FeedbackController extends Zend_Controller_Action
             $countyArr['judete'][$index]['name'] = $countyObj->getCounty();
         }
 
+        $countyArr['qid'] = $questId;
+
         echo Zend_Json_Encoder::encode($countyArr);
 
+    }
+
+	/**
+	 * Initialize lang translation
+	 *
+	 * @return null
+	 */
+    public function mobilehospitalAction()
+    {
+
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 
     /**
