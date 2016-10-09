@@ -219,6 +219,22 @@ class FeedbackController extends Zend_Controller_Action
 
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
+        $qid = $this->_request->getParam('qid');
+        $county = $this->_request->getParam('judetId');
+
+        $hospitalMap = new Application_Model_HospitalMapper();
+        $hospitalObjArr = $hospitalMap->fetchAll("county_id = '".$county."'");
+        $hospitalArr = array();
+        foreach ($hospitalObjArr as $index => $hospitalObj) {
+            $hospitalArr['spitale'][$index]['id'] = $hospitalObj->getHospital_id();
+            $hospitalArr['spitale'][$index]['name'] = $hospitalObj->getHospital();
+        }
+
+        $hospitalArr['qid'] = $qid;
+
+        echo Zend_Json::encode($hospitalArr);
+
+
     }
 
     /**
