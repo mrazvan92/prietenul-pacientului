@@ -1,5 +1,17 @@
 function acivateHospital(countySel){
     countySelVal = $(countySel).val();
+    
+    $('#station option').each(function() {
+        if ($(this).val() != '' ) {
+            $(this).remove();
+        }
+    });
+    $('#hospital option').each(function() {
+        if ($(this).val() != '' ) {
+            $(this).remove();
+        }
+    });
+    
     if (countySelVal != '') {
         $.ajax({url: "feedback/fillHospital", data: {county: countySelVal}, success: function(result){
              var hospitalObj = jQuery.parseJSON(result);
@@ -12,24 +24,18 @@ function acivateHospital(countySel){
             $('#hospital').prop('disabled', false);
         }});
     } else {
-        $('#hospital').prop('disabled', true);
-        $('#hospital option').each(function() {
-            if ($(this).val() != '' ) {
-                $(this).remove();
-            }
-        });
-        
+        $('#hospital').prop('disabled', true);        
         $('#station').prop('disabled', true);
-        $('#station option').each(function() {
-            if ($(this).val() != '' ) {
-                $(this).remove();
-            }
-        });
     }
 }
 
 function acivateStation(hospitalSel){
     hospitalSelVal = $(hospitalSel).val();
+    $('#station option').each(function() {
+        if ($(this).val() != '' ) {
+            $(this).remove();
+        }
+    });
     if (hospitalSelVal != '') {
         $.ajax({url: "feedback/fillStation", data: {hospital: hospitalSelVal}, success: function(result){
              var stationObj = jQuery.parseJSON(result);
@@ -43,11 +49,6 @@ function acivateStation(hospitalSel){
         }});
     } else {
         $('#station').prop('disabled', true);
-        $('#station option').each(function() {
-            if ($(this).val() != '' ) {
-                $(this).remove();
-            }
-        });
     }
 }
 

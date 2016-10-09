@@ -326,13 +326,15 @@ class FeedbackController extends Zend_Controller_Action
     {
         $answerArr = $this->_request->getParam('answer');
         $questFeedDetailsMapper = new Application_Model_QuestionnaireFeedbackDetailsMapper();
-        foreach ($answerArr as $qid => $answer) {
-            $questFeedDetailsObj = new Application_Model_QuestionnaireFeedbackDetails();
-            $questFeedDetailsObj->setQuestionnaire_feedback_id($questFeedId);
-            $questFeedDetailsObj->setQuestion_id($qid);
-            $questFeedDetailsObj->setAnswer($answer);
+        if (isset($answerArr) === true) {
+            foreach ($answerArr as $qid => $answer) {
+                $questFeedDetailsObj = new Application_Model_QuestionnaireFeedbackDetails();
+                $questFeedDetailsObj->setQuestionnaire_feedback_id($questFeedId);
+                $questFeedDetailsObj->setQuestion_id($qid);
+                $questFeedDetailsObj->setAnswer($answer);
 
-            $questFeedDetailsMapper->insert($questFeedDetailsObj);
+                $questFeedDetailsMapper->insert($questFeedDetailsObj);
+            }
         }
     }
 
