@@ -7,9 +7,47 @@
   </div>
   <div id="content">
     <form name="feedbackForm" id="feedbackForm" method="post">
+        <?php
+        switch ($this->currentStep) {
+            case 'firstPage':
+                ?>
+                    <input type="button" value="Start" onclick="goToNextPage('start');">
+                <?php
+                break;
+            case 'selectStation':
+                ?>
+                    <select name="county" onchange="acivateHospital(this);">
+                    <option value="">Select...</option>
+                    <?php
+                          foreach ($this->countyArr as $county) {
+                              echo '<option value="'.$county['county_id'].'">'.$county['county'].'</option>';
+                          }
+                    ?>
+                    </select>
 
+                    <select name="hospital"  onchange="acivateStation(this);" id='hospital' disabled>
+                    <option value="">Select...</option>
+                    </select>
+
+                    <select name="station" id='station'  onchange="startQuestionnaire(this);" disabled>
+                    <option value="">Select...</option>
+                    </select>
+                <?php
+                break;
+            case 'fill':
+                ?>
+                    <input type="button" value="Next" onclick="goToNextPage('next');">
+                <?php
+                break;
+          ?>
+
+        <?php
+        }
+        ?>
+        <input value="<?php echo $this->currentStep;?>" name="currentStep" id="currentStep" type="hidden">
         <input value="<?php echo $this->sectionId;?>" name="sectionId" id="sectionId" type="hidden">
         <input value="<?php echo $this->token;?>" name="token" id="token" type="hidden">
+        <input value="<?php echo $this->questId;?>" name="questId" id="questId" type="hidden">
     </form>
   </div>
 

@@ -79,7 +79,8 @@ class Application_Model_SectionsMapper
         $data = array(
 			'section_id' => $model->getSection_id(),
 			'questionnaire_id' => $model->getQuestionnaire_id(),
-			'section' => $model->getSection()
+			'section' => $model->getSection(),
+			'description' => $model->getDescription()
 		);
 
 
@@ -101,7 +102,8 @@ class Application_Model_SectionsMapper
     	$data = array(
 			'section_id' => $model->getSection_id(),
 			'questionnaire_id' => $model->getQuestionnaire_id(),
-			'section' => $model->getSection()
+			'section' => $model->getSection(),
+			'description' => $model->getDescription()
 		);
 
     	return $this->getDbTable()->insert($data);
@@ -120,7 +122,8 @@ class Application_Model_SectionsMapper
     	$data = array(
 			'section_id' => $model->getSection_id(),
 			'questionnaire_id' => $model->getQuestionnaire_id(),
-			'section' => $model->getSection()
+			'section' => $model->getSection(),
+			'description' => $model->getDescription()
 		);
 
     	return $this->getDbTable()->update($data, $where);
@@ -138,6 +141,7 @@ class Application_Model_SectionsMapper
 		$model->setSection_id($row->section_id);
 		$model->setQuestionnaire_id($row->questionnaire_id);
 		$model->setSection($row->section);
+		$model->setDescription($row->description);
 
     }
 

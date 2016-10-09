@@ -33,6 +33,7 @@ class Application_Model_Sections
 	protected $_section_id;
 	protected $_questionnaire_id;
 	protected $_section;
+	protected $_description;
 
 	/**
 	 * Model class constructor
@@ -157,6 +158,27 @@ class Application_Model_Sections
 		$this->_section = $value ;
 	}
 
+	/*
+	 * Get Description value
+	 *
+	 * @return String Value
+	*/
+	public function getDescription()
+	{
+		return $this->_description;
+	}
+
+	/*
+	 * Set Description value
+	 *
+	 * @param String Value
+	 * @return null
+	*/
+	public function setDescription($value)
+	{
+		$this->_description = $value ;
+	}
+
 
     /**
      * Return object as array
@@ -169,6 +191,7 @@ class Application_Model_Sections
 		$data['section_id'] = $this->getSection_id();
 		$data['questionnaire_id'] = $this->getQuestionnaire_id();
 		$data['section'] = $this->getSection();
+		$data['description'] = $this->getDescription();
 		return $data;
     }
 }
