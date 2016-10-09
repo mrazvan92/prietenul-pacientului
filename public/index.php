@@ -23,7 +23,6 @@ define("DEMO_APPLICATION", false);
 
 /** Zend_Application */
 require_once 'Zend/Application.php';
-require_once 'Debug.php';
 require_once 'Helper.php';
 
 // Create application, bootstrap, and run
