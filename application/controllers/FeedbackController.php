@@ -277,7 +277,7 @@ class FeedbackController extends Zend_Controller_Action
         $qid = $this->_request->getParam('qid');
         $station = 3;
 //        $station = $this->_request->getParam('sectieId');
-//        $qid = 1;
+        $qid = 1;
 //        $station = 1;
 
         $questionnaireMapp = new Application_Model_QuestionnaireFeedbackMapper();
