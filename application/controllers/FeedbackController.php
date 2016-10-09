@@ -183,6 +183,30 @@ class FeedbackController extends Zend_Controller_Action
         $questionnaireMapp->update($questionnaireObj, "questionnaire_feedback_id = '".$questionnaire."'");
     }
 
+	/**
+	 * Initialize lang translation
+	 *
+	 * @return null
+	 */
+    public function mobilestartAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $authCode = $this->_request->getParam('authCode');
+        $questId = $this->startQuestionnaire($authCode);
+
+        $countyMapp = new Application_Model_CountyMapper();
+        $countyObjArr = $countyMapp->fetchAll();
+        $countyArr = array();
+        foreach ($countyObjArr as $index => $countyObj) {
+            $countyArr['judete'][$index]['id'] = $countyObj->getCounty_id();
+            $countyArr['judete'][$index]['name'] = $countyObj->getCounty();
+        }
+
+        echo Zend_Json_Encoder::encode($countyArr);
+
+    }
+
     /**
      * startQuestionnaire
 	 *
