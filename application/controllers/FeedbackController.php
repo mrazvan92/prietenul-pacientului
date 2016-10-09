@@ -316,6 +316,23 @@ class FeedbackController extends Zend_Controller_Action
 
 
     }
+	/**
+	 * Initialize lang translation
+	 *
+	 * @return null
+	 */
+    public function mobilesavequestionsAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $qid = $this->_request->getParam('qid');
+        $answers = $this->_request->getParam('answers');
+        $qid = 1;
+
+
+
+
+    }
 
     /**
      * startQuestionnaire

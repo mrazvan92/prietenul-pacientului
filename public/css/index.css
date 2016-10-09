@@ -38,8 +38,45 @@ body {
 	background-image: -webkit-linear-gradient(top, #F7F7F7, whiteSmoke);
 	background-image: linear-gradient(top, #F7F7F7, whiteSmoke);
 	font-family: sans-serif, Verdana;
-	font-size: 12px;
 	color: #000000;
 	overflow-x: hidden;
 	height: 100%;
+	width: 100%;
+}
+
+
+.copy {
+    background: transparent -moz-linear-gradient(center bottom , #6c7a95 0%, #4d5b76 70%) repeat scroll 0 0;
+    border-bottom: 1px solid #4d5b76;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 10px 0;
+    text-align: center;
+    width: 100%;
+}
+
+.welcome {
+    text-align: center;
+    
+}
+.welcome button{
+    margin: 0 auto;
+}
+
+.content {
+    margin: 0 auto;    
+}
+
+#fillContent {
+    margin: 0 auto;
+    width: 600px;    
+}
+
+#selectStation {
+    width: 300px;
+    margin: 0 auto;    
+}
+
+.stationHeader {
+    font-weight: bold;
 }

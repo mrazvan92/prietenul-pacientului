@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <?php
-	//$this->headLink()->appendStylesheet($this->baseUrl('css/index.css'));
+	$this->headLink()->appendStylesheet($this->baseUrl('css/index.css'));
     $this->headScript()->prependFile($this->baseUrl('js/index.js'));
 ?>
 <div id="wrapper">
@@ -9,37 +9,45 @@
   <div id="content">
     <form name="feedbackForm" id="feedbackForm" method="post">
         <?php
-        var_dump($this->currentStep);
         switch ($this->currentStep) {
             case 'firstPage':
                 ?>
-                    Welcome
-                    <input type="button" value="Start" onclick="goToNextPage('start');">
+                    <div class="welcome">
+                        Welcome
+                         <input type="button" value="Start" onclick="goToNextPage('start');">
+                    </div>
+
                 <?php
                 break;
             case 'selectStation':
                 ?>
-                    <select name="county" onchange="acivateHospital(this);">
-                    <option value="">Select...</option>
-                    <?php
-                          foreach ($this->countyArr as $county) {
-                              echo '<option value="'.$county['county_id'].'">'.$county['county'].'</option>';
-                          }
-                    ?>
-                    </select>
+                    <div id="selectStation">
+                        <select name="county" onchange="acivateHospital(this);">
+                        <option value="">Select...</option>
+                        <?php
+                              foreach ($this->countyArr as $county) {
+                                  echo '<option value="'.$county['county_id'].'">'.$county['county'].'</option>';
+                              }
+                        ?>
+                        </select>
+                        <br>
+                        <br>
+                        <select name="hospital"  onchange="acivateStation(this);" id='hospital' disabled>
+                        <option value="">Select...</option>
+                        </select>
+                        <br>
+                        <br>
 
-                    <select name="hospital"  onchange="acivateStation(this);" id='hospital' disabled>
-                    <option value="">Select...</option>
-                    </select>
-
-                    <select name="station" id='station'  onchange="startQuestionnaire(this);" disabled>
-                    <option value="">Select...</option>
-                    </select>
+                        <select name="station" id='station'  onchange="startQuestionnaire(this);" disabled>
+                        <option value="">Select...</option>
+                        </select>
+                    </div>
                 <?php
                 break;
             case 'fill':
             case 'finalize':
                 ?>
+                    <div id="fillContent">
                     <div class="stationHeader"><?php echo $this->section;?></div>
                     <div class="stationDescription"><?php echo $this->sectionDescription;?></div>
                     <?php
@@ -69,6 +77,7 @@
                     } else {
                 ?>
                     <input type="button" value="Finalize" onclick="goToNextPage('finalize');">
+                    </div>
                 <?php
                     }
                 break;
