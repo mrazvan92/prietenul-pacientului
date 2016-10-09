@@ -8,9 +8,11 @@
   <div id="content">
     <form name="feedbackForm" id="feedbackForm" method="post">
         <?php
+        var_dump($this->currentStep);
         switch ($this->currentStep) {
             case 'firstPage':
                 ?>
+                    Welcome
                     <input type="button" value="Start" onclick="goToNextPage('start');">
                 <?php
                 break;
@@ -35,8 +37,43 @@
                 <?php
                 break;
             case 'fill':
+            case 'finalize':
                 ?>
+                    <div class="stationHeader"><?php echo $this->section;?></div>
+                    <div class="stationDescription"><?php echo $this->sectionDescription;?></div>
+                    <?php
+                        foreach ($this->questionsArr as $question) {
+                            ?>
+                            <div class="question"><?php echo $question['question'];?></div>
+                            <?php
+                            if ($question['question_type'] === 'radio') {
+                                 foreach ($this->answers[$question['question_id']] as $answer) {
+                                    ?>
+                                    <div class="answer"><span><input type="radio" name="answer[<?php echo $question['question_id'];?>]" value="<?php echo $answer['answer_id'];?>"></span>&nbsp;<?php echo $answer['answer'];?></div>
+                                    <?php
+
+                                 }
+                            } else {
+                                ?>
+                                <textarea cols="40" rows="5" name="answer[<?php echo $question['question_id'];?>]"></textarea>
+                                <?php
+                            }
+                        }
+                    ?>
+                    <?php
+                    if ($this->currentStep === 'fill') {
+                    ?>
                     <input type="button" value="Next" onclick="goToNextPage('next');">
+                <?php
+                    } else {
+                ?>
+                    <input type="button" value="Finalize" onclick="goToNextPage('finalize');">
+                <?php
+                    }
+                break;
+            case 'thankyou':
+                ?>
+                    Multumim pentru feedback!
                 <?php
                 break;
           ?>

@@ -63,7 +63,7 @@ class FeedbackController extends Zend_Controller_Action
         $questFeedObj = current($questFeedObjArr);
         $this->view->token = $this->generateToken($questId);
         $this->view->questId = $questId;
-        Debug::dump($_REQUEST);
+
         switch ($currentStep) {
             case 'firstPage':
 
@@ -83,31 +83,49 @@ class FeedbackController extends Zend_Controller_Action
                 $questFeedMapp->update($questFeedObj, "questionnaire_feedback_id = '".$questId."'");
                 break;
             case 'fill':
-                $section = $this->_request->getParam('section');
+                $section = $this->_request->getParam('sectionId');
                 $section = ($section + 1);
                 $sectionObjArr = $sectionMapper->fetchAll("section_id = '".$section."'");
                 $sectionObj = current($sectionObjArr);
+                $this->saveInput($questId);
                 break;
             case 'finalize':
-
+                $this->view->currentStep = 'finalize';
+                $this->saveInput($questId);
+                break;
+            case 'thankyou':
+                $this->view->currentStep = 'thankyou';
                 break;
         }
 
-        if ($currentStep === 'fill' || $currentStep === 'start') {
+        if ($currentStep === 'fill' || $currentStep === 'start' || $currentStep === 'finalize') {
+            $sectionId = $sectionObj->getSection_id();
             $this->view->currentStep = 'fill';
+            $this->view->sectionId = $sectionId;
             $nextsection = ($section + 1);
             $nextSectionObjArr = $sectionMapper->fetchAll("section_id = '".$nextsection."'");
             $nextSectionObj = current($nextSectionObjArr);
 
             if ($nextSectionObj === false) {
                 $this->view->currentStep = 'finalize';
-            } else {
-                $this->view->sectionDescription = $sectionObj->getDescription();
-                $this->view->section = $sectionObj->getSection();
-                $this->view->sectionId = $sectionObj->getSection_id();
-                var_dump($sectionObj);
+            }
+
+            $this->view->sectionDescription = $sectionObj->getDescription();
+            $this->view->section = $sectionObj->getSection();
+
+            $questionMapper= new Application_Model_QuestionsMapper();
+            $questionArr = $this->ObjArrToArr($questionMapper->fetchAll("section_id = '".$sectionId."'"), array('question_id', 'question', 'question_type'));
+            $this->view->questionsArr = $questionArr;
+            $answers = array();
+            foreach ($questionArr as $question) {
+                $answerMapper = new Application_Model_AnswersMapper();
+                $currentAns = $this->ObjArrToArr($answerMapper->fetchAll("question_id = '".$question['question_id']."'"), array('answer_id', 'answer'));
+                $answers[$question['question_id']] = $currentAns;
 
             }
+
+            $this->view->answers = $answers;
+
         }
     }
 
@@ -163,6 +181,26 @@ class FeedbackController extends Zend_Controller_Action
         $questionnaireObj = $questionnaireMapp->find($questionnaire);
         $questionnaireObj->setStation_id($station);
         $questionnaireMapp->update($questionnaireObj, "questionnaire_feedback_id = '".$questionnaire."'");
+    }
+
+    /**
+     * startQuestionnaire
+	 *
+	 * @param string $authCode
+     * @return string
+     */
+	protected function saveInput($questFeedId)
+    {
+        $answerArr = $this->_request->getParam('answer');
+        $questFeedDetailsMapper = new Application_Model_QuestionnaireFeedbackDetailsMapper();
+        foreach ($answerArr as $qid => $answer) {
+            $questFeedDetailsObj = new Application_Model_QuestionnaireFeedbackDetails();
+            $questFeedDetailsObj->setQuestionnaire_feedback_id($questFeedId);
+            $questFeedDetailsObj->setQuestion_id($qid);
+            $questFeedDetailsObj->setAnswer($answer);
+
+            $questFeedDetailsMapper->insert($questFeedDetailsObj);
+        }
     }
 
     /**

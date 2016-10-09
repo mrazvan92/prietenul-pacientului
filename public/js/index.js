@@ -66,6 +66,8 @@ function startQuestionnaire(station) {
 function goToNextPage(step) {
     if (step === 'start') {
         $('#currentStep').val('selectStation');
+    }  else if (step === 'finalize') {
+        $('#currentStep').val('thankyou');
     } 
         
     $('#feedbackForm').submit();
