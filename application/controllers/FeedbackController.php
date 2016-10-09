@@ -114,11 +114,11 @@ class FeedbackController extends Zend_Controller_Action
             $this->view->section = $sectionObj->getSection();
 
             $questionMapper= new Application_Model_QuestionsMapper();
+            $answerMapper = new Application_Model_AnswersMapper();
             $questionArr = $this->ObjArrToArr($questionMapper->fetchAll("section_id = '".$sectionId."'"), array('question_id', 'question', 'question_type'));
             $this->view->questionsArr = $questionArr;
             $answers = array();
             foreach ($questionArr as $question) {
-                $answerMapper = new Application_Model_AnswersMapper();
                 $currentAns = $this->ObjArrToArr($answerMapper->fetchAll("question_id = '".$question['question_id']."'"), array('answer_id', 'answer'));
                 $answers[$question['question_id']] = $currentAns;
 
@@ -259,6 +259,57 @@ class FeedbackController extends Zend_Controller_Action
         $stationArr['qid'] = $qid;
 
         echo Zend_Json::encode($stationArr);
+
+
+    }
+
+	/**
+	 * Initialize lang translation
+	 *
+	 * @return null
+	 */
+    public function mobilequestionsAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+//        $qid = $this->_request->getParam('qid');
+//        $station = $this->_request->getParam('sectieId');
+        $qid = 1;
+        $station = 1;
+
+        $questionnaireMapp = new Application_Model_QuestionnaireFeedbackMapper();
+        $questionnaireObj = $questionnaireMapp->find($qid);
+        $questionnaireObj->setStation_id($station);
+        $questionnaireMapp->update($questionnaireObj, "questionnaire_feedback_id = '".$qid."'");
+        $sectionMapper = new Application_Model_SectionsMapper();
+        $questionMapper = new Application_Model_QuestionsMapper();
+        $questFeedMapp = new Application_Model_QuestionnaireFeedbackMapper();
+        $questFeedObj = $questFeedMapp->find($qid);
+        $sectionObjArr = $sectionMapper->fetchAll("questionnaire_id = '".$questFeedObj->getQuestionnaire_feedback_id()."'");
+        $questionsArr['qid'] = $qid;
+        $answerMapper = new Application_Model_AnswersMapper();
+
+        foreach ($sectionObjArr as $index => $sectionObj) {
+            $questionsArr['sections'][$index]['name'] = $sectionObj->getSection();
+            $questionsArr['sections'][$index]['description'] = $sectionObj->getDescription();
+            $questionObjArr = $questionMapper->fetchAll("section_id = '".$sectionObj->getSection_id()."'");
+            foreach ($questionObjArr as $qindex => $questionObj) {
+                $questionsArr['sections'][$index]['questions'][$qindex]['id'] = $questionObj->getQuestion_id();
+                $questionsArr['sections'][$index]['questions'][$qindex]['title'] = $questionObj->getQuestion();
+                $questionsArr['sections'][$index]['questions'][$qindex]['type'] = $questionObj->getQuestion_type();
+                if ($questionObj->getQuestion_type() === 'radio') {
+                    $ansObjArr = $answerMapper->fetchAll("question_id = '".$questionObj->getQuestion_id()."'");
+                    foreach ($ansObjArr as $ansIndex => $ansObj) {
+                        $questionsArr['sections'][$index]['questions'][$qindex]['answers'][$ansIndex]['id'] = $ansObj->getAnswer_id();
+                        $questionsArr['sections'][$index]['questions'][$qindex]['answers'][$ansIndex]['name'] = $ansObj->getAnswer();
+                    }
+
+
+                }
+            }
+        }
+
+        echo Zend_Json::encode($questionsArr);
 
 
     }
