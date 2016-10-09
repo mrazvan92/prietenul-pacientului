@@ -247,7 +247,7 @@ class FeedbackController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $qid = $this->_request->getParam('qid');
-        $hospital = $this->_request->getParam('spitalId');
+//        $hospital = $this->_request->getParam('spitalId');
 
         $stationMap = new Application_Model_StationsMapper();
 //        $stationObjArr = $stationMap->fetchAll("hospital_id = '".$hospital."'");
@@ -275,7 +275,8 @@ class FeedbackController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $qid = $this->_request->getParam('qid');
-        $station = $this->_request->getParam('sectieId');
+        $station = 3;
+//        $station = $this->_request->getParam('sectieId');
 //        $qid = 1;
 //        $station = 1;
 
