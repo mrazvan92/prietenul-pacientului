@@ -1,93 +1,118 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <?php
-	//$this->headLink()->appendStylesheet($this->baseUrl('css/index.css'));
-    $this->headScript()->prependFile($this->baseUrl('js/index.js'));
+
+$this->headLink()->appendStylesheet($this->baseUrl('css/bootstrap.css'));
+$this->headLink()->appendStylesheet($this->baseUrl('css/font-awesome/css/font-awesome.css'));
+$this->headLink()->appendStylesheet($this->baseUrl('css/plugins/iCheck/custom.css'));
+$this->headLink()->appendStylesheet($this->baseUrl('css/animate.css'));
+$this->headLink()->appendStylesheet($this->baseUrl('css/style.css'));
+$this->headLink()->appendStylesheet($this->baseUrl('css/custom.css'));
+$this->headLink()->appendStylesheet($this->baseUrl('css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css'));
+
+
+$this->headScript()->prependFile($this->baseUrl('js/index.js'));
+$this->headScript()->prependFile($this->baseUrl('js/bootstrap.min.js'));
+$this->headScript()->prependFile($this->baseUrl('js/plugins/metisMenu/jquery.metisMenu.js'));
+$this->headScript()->prependFile($this->baseUrl('js/plugins/slimscroll/jquery.slimscroll.min.js'));
+$this->headScript()->prependFile($this->baseUrl('js/inspinia.js'));
+$this->headScript()->prependFile($this->baseUrl('js/plugins/pace/pace.min.js'));
+$this->headScript()->prependFile($this->baseUrl('js/plugins/iCheck/icheck.min.js'));
 ?>
 <div id="wrapper">
-  <div id="header">
-  </div>
-  <div id="content">
-    <form name="feedbackForm" id="feedbackForm" method="post">
-        <?php
-        var_dump($this->currentStep);
-        switch ($this->currentStep) {
-            case 'firstPage':
-                ?>
-                    Welcome
-                    <input type="button" value="Start" onclick="goToNextPage('start');">
-                <?php
-                break;
-            case 'selectStation':
-                ?>
-                    <select name="county" onchange="acivateHospital(this);">
-                    <option value="">Select...</option>
-                    <?php
-                          foreach ($this->countyArr as $county) {
-                              echo '<option value="'.$county['county_id'].'">'.$county['county'].'</option>';
-                          }
-                    ?>
-                    </select>
-
-                    <select name="hospital"  onchange="acivateStation(this);" id='hospital' disabled>
-                    <option value="">Select...</option>
-                    </select>
-
-                    <select name="station" id='station'  onchange="startQuestionnaire(this);" disabled>
-                    <option value="">Select...</option>
-                    </select>
-                <?php
-                break;
-            case 'fill':
-            case 'finalize':
-                ?>
-                    <div class="stationHeader"><?php echo $this->section;?></div>
-                    <div class="stationDescription"><?php echo $this->sectionDescription;?></div>
-                    <?php
-                        foreach ($this->questionsArr as $question) {
-                            ?>
-                            <div class="question"><?php echo $question['question'];?></div>
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form name="feedbackForm" id="feedbackForm" method="post">
                             <?php
-                            if ($question['question_type'] === 'radio') {
-                                 foreach ($this->answers[$question['question_id']] as $answer) {
+                            switch ($this->currentStep) {
+                                case 'firstPage':
                                     ?>
-                                    <div class="answer"><span><input type="radio" name="answer[<?php echo $question['question_id'];?>]" value="<?php echo $answer['answer_id'];?>"></span>&nbsp;<?php echo $answer['answer'];?></div>
+                                    Welcome
+                                    <input type="button" value="Start" onclick="goToNextPage('start');">
                                     <?php
+                                    break;
+                                case 'selectStation':
+                                    ?>
+                                    <select name="county" onchange="acivateHospital(this);">
+                                        <option value="">Select...</option>
+                                        <?php
+                                        foreach ($this->countyArr as $county) {
+                                            echo '<option value="' . $county['county_id'] . '">' . $county['county'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
 
-                                 }
-                            } else {
-                                ?>
-                                <textarea cols="40" rows="5" name="answer[<?php echo $question['question_id'];?>]"></textarea>
+                                    <select name="hospital"  onchange="acivateStation(this);" id='hospital' disabled>
+                                        <option value="">Select...</option>
+                                    </select>
+
+                                    <select name="station" id='station'  onchange="startQuestionnaire(this);" disabled>
+                                        <option value="">Select...</option>
+                                    </select>
+                                    <?php
+                                    break;
+                                case 'fill':
+                                case 'finalize':
+                                    ?>
+                                    <div class="form-group">
+                                        <label class="stationHeader"><?php echo $this->section; ?></label>
+                                        <div class="stationDescription"><?php echo $this->sectionDescription; ?></div>
+                                        <?php
+                                        foreach ($this->questionsArr as $question) {
+                                            ?>
+
+                                            <?php echo $question['question']; ?>
+                                            <?php
+                                            if ($question['question_type'] === 'radio') {
+                                                foreach ($this->answers[$question['question_id']] as $answer) {
+                                                    ?>
+                                                    <div class="i-checks">
+                                                        <label> 
+                                                            <input type="radio" value="<?php echo $answer['answer_id']; ?>" name="answer[<?php echo $question['question_id']; ?>]"> <i></i> <?php echo $answer['answer']; ?> 
+                                                        </label>
+                                                    </div>
+                                                    <?php
+                                                }
+                                            } else {
+                                                ?>
+                                                <textarea cols="40" rows="5" name="answer[<?php echo $question['question_id']; ?>]"></textarea>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                        <?php
+                                        if ($this->currentStep === 'fill') {
+                                            ?>
+                                            <input type="button" value="Next" onclick="goToNextPage('next');">
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <input type="button" value="Finalize" onclick="goToNextPage('finalize');">
+                                            <?php
+                                        }
+                                        ?> </div> <?php
+                                    break;
+                                case 'thankyou':
+                                    ?>
+                                    Multumim pentru feedback!
+                                    <?php
+                                    break;
+                                    ?>
+
                                 <?php
                             }
-                        }
-                    ?>
-                    <?php
-                    if ($this->currentStep === 'fill') {
-                    ?>
-                    <input type="button" value="Next" onclick="goToNextPage('next');">
-                <?php
-                    } else {
-                ?>
-                    <input type="button" value="Finalize" onclick="goToNextPage('finalize');">
-                <?php
-                    }
-                break;
-            case 'thankyou':
-                ?>
-                    Multumim pentru feedback!
-                <?php
-                break;
-          ?>
+                            ?>
+                            <input value="<?php echo $this->currentStep; ?>" name="currentStep" id="currentStep" type="hidden">
+                            <input value="<?php echo $this->sectionId; ?>" name="sectionId" id="sectionId" type="hidden">
+                            <input value="<?php echo $this->token; ?>" name="token" id="token" type="hidden">
+                            <input value="<?php echo $this->questId; ?>" name="questId" id="questId" type="hidden">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <?php
-        }
-        ?>
-        <input value="<?php echo $this->currentStep;?>" name="currentStep" id="currentStep" type="hidden">
-        <input value="<?php echo $this->sectionId;?>" name="sectionId" id="sectionId" type="hidden">
-        <input value="<?php echo $this->token;?>" name="token" id="token" type="hidden">
-        <input value="<?php echo $this->questId;?>" name="questId" id="questId" type="hidden">
-    </form>
-  </div>
-
-  <div class="copy">© Copyright 2016 <a href="http://www.GovItHub.ro" target="_blank">GovItHub.ro</a></div>
+    <div class="copy">© Copyright 2016 <a href="http://www.GovItHub.ro" target="_blank">GovItHub.ro</a></div>
 </div>
