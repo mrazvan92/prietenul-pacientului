@@ -216,7 +216,6 @@ class FeedbackController extends Zend_Controller_Action
 	 */
     public function mobilehospitalAction()
     {
-
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $qid = $this->_request->getParam('qid');
@@ -233,6 +232,33 @@ class FeedbackController extends Zend_Controller_Action
         $hospitalArr['qid'] = $qid;
 
         echo Zend_Json::encode($hospitalArr);
+
+
+    }
+
+	/**
+	 * Initialize lang translation
+	 *
+	 * @return null
+	 */
+    public function mobilestationAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $qid = $this->_request->getParam('qid');
+        $hospital = $this->_request->getParam('spitalId');
+
+        $stationMap = new Application_Model_StationsMapper();
+        $stationObjArr = $stationMap->fetchAll("hospital_id = '".$hospital."'");
+        $stationArr = array();
+        foreach ($stationObjArr as $index => $hospitalObj) {
+            $stationArr['sectie'][$index]['id'] = $hospitalObj->getStation_id();
+            $stationArr['sectie'][$index]['name'] = $hospitalObj->getStation();
+        }
+
+        $stationArr['qid'] = $qid;
+
+        echo Zend_Json::encode($stationArr);
 
 
     }
