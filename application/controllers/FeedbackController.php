@@ -159,7 +159,8 @@ class FeedbackController extends Zend_Controller_Action
         $hospital = $this->_request->getParam('hospital');
 
         $stationMap = new Application_Model_StationsMapper();
-        $stationArr = $this->ObjArrToArr($stationMap->fetchAll("hospital_id = '".$hospital."'"), array('station_id', 'station'));
+//        $stationArr = $this->ObjArrToArr($stationMap->fetchAll("hospital_id = '".$hospital."'"), array('station_id', 'station'));
+        $stationArr = $this->ObjArrToArr($stationMap->fetchAll(), array('station_id', 'station'));
 
         echo Zend_Json::encode($stationArr);
 
@@ -249,7 +250,8 @@ class FeedbackController extends Zend_Controller_Action
         $hospital = $this->_request->getParam('spitalId');
 
         $stationMap = new Application_Model_StationsMapper();
-        $stationObjArr = $stationMap->fetchAll("hospital_id = '".$hospital."'");
+//        $stationObjArr = $stationMap->fetchAll("hospital_id = '".$hospital."'");
+        $stationObjArr = $stationMap->fetchAll();
         $stationArr = array();
         foreach ($stationObjArr as $index => $hospitalObj) {
             $stationArr['sectie'][$index]['id'] = $hospitalObj->getStation_id();
@@ -272,10 +274,10 @@ class FeedbackController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-//        $qid = $this->_request->getParam('qid');
-//        $station = $this->_request->getParam('sectieId');
-        $qid = 1;
-        $station = 1;
+        $qid = $this->_request->getParam('qid');
+        $station = $this->_request->getParam('sectieId');
+//        $qid = 1;
+//        $station = 1;
 
         $questionnaireMapp = new Application_Model_QuestionnaireFeedbackMapper();
         $questionnaireObj = $questionnaireMapp->find($qid);
